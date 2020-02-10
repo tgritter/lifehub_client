@@ -45,22 +45,22 @@ export default function Dashboard() {
   const classes = useStyles();
   const [data, setData] = React.useState([]);
 
-  useEffect(() => {
-    axios.get('/api/v1/todos')
-    .then(function (response) {
-      // handle success
-      console.log(response.data)
-      setData(response.data);
+  // useEffect(() => {
+  //   axios.get('/api/v1/todos')
+  //   .then(function (response) {
+  //     // handle success
+  //     console.log(response.data)
+  //     setData(response.data);
 
-    })
-    .catch(function (error) {
-      // handle error
-      console.log(error);
-    })
-    .then(function () {
-      // always executed
-    });
-  }, [])
+  //   })
+  //   .catch(function (error) {
+  //     // handle error
+  //     console.log(error);
+  //   })
+  //   .then(function () {
+  //     // always executed
+  //   });
+  // }, [])
 
   const setChecked = (taskId) => {
     const index = data.findIndex(x => x.id === taskId);
