@@ -40,7 +40,7 @@ class LoginPage extends React.Component {
     const username = formElements.namedItem("username").value;
     const password = formElements.namedItem("password").value;
 
-    axios.post('http://localhost:3000/authenticate', {
+    axios.post(process.env.REACT_APP_API_URL + '/authenticate', {
       email: username,
       password: password
     })

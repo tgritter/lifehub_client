@@ -45,7 +45,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     console.log('ENVTEST', process.env.REACT_APP_API_URL)
-    axios.get('https://lifehub-server.herokuapp.com/api/v1/todos')
+    axios.get(process.env.REACT_APP_API_URL + '/api/v1/todos')
     .then(function (response) {
       // handle success
       console.log(response.data)
@@ -97,13 +97,13 @@ export default function Dashboard() {
     const task = data[index];
     task.category = category
     if(task.created_at){
-      axios.put('/api/v1/todos/' + task.id, task)
+      axios.put(process.env.REACT_APP_API_URL + '/api/v1/todos/' + task.id, task)
       .then(function (response) {
         console.log(response);
       })
     }else{
       delete task.id;
-      axios.post('/api/v1/todos', task)
+      axios.post(process.env.REACT_APP_API_URL + '/api/v1/todos', task)
       .then(function (response) {
         console.log(response);
       })
@@ -114,7 +114,7 @@ export default function Dashboard() {
     const index = data.findIndex(x => x.id.toString() === taskId.toString());
     const task = data[index];
     const newArray = [...data]
-    axios.delete('/api/v1/todos/' + task.id)
+    axios.delete(process.env.REACT_APP_API_URL + '/api/v1/todos/' + task.id)
     .then(function (response) {
       newArray.splice(index, 1)
       setData(newArray)
