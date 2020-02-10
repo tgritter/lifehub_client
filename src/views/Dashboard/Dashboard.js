@@ -30,7 +30,6 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-
 import {
   dailySalesChart,
   emailsSubscriptionChart,
@@ -40,27 +39,27 @@ import {
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 
 const useStyles = makeStyles(styles);
-
 export default function Dashboard() {
   const classes = useStyles();
   const [data, setData] = React.useState([]);
 
-  // useEffect(() => {
-  //   axios.get('/api/v1/todos')
-  //   .then(function (response) {
-  //     // handle success
-  //     console.log(response.data)
-  //     setData(response.data);
+  useEffect(() => {
+    console.log('ENVTEST', process.env.REACT_APP_API_URL)
+    axios.get('https://lifehub-server.herokuapp.com/api/v1/todos')
+    .then(function (response) {
+      // handle success
+      console.log(response.data)
+      setData(response.data);
 
-  //   })
-  //   .catch(function (error) {
-  //     // handle error
-  //     console.log(error);
-  //   })
-  //   .then(function () {
-  //     // always executed
-  //   });
-  // }, [])
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+    })
+    .then(function () {
+      // always executed
+    });
+  }, [])
 
   const setChecked = (taskId) => {
     const index = data.findIndex(x => x.id === taskId);

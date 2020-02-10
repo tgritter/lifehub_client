@@ -31,8 +31,8 @@ const hist = createBrowserHistory();
 
 const token = window.localStorage.getItem('token')
 axios.defaults.headers.common = {'Authorization': `Bearer ${token}`}
-console.log('test')
-
+require('dotenv').config()
+console.log('ProcessTest',process.env)
 ReactDOM.render(
   <Router history={hist}>
     <Switch>
