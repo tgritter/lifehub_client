@@ -83,7 +83,7 @@ export default function Dashboard() {
     const newArray = [...data]
     newArray.push({
       id: 0 - data.length,
-      description: 'addtest',
+      description: '',
       finished: false,
       weight: 1,
       category: category.toString(),
