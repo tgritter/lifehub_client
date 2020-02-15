@@ -28,11 +28,9 @@ export default function Tasks(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = event => {
-    console.log('CurrentTarget: ', event.currentTarget)
     setAnchorEl(event.currentTarget);
   };
   const handleClose = (index, type) => {
-    console.log('id', anchorEl.id)
     if(type === 'save'){
       props.saveTask(anchorEl.id, props.category)
     }
@@ -53,7 +51,7 @@ export default function Tasks(props) {
                 className={classes.checkbox}
                 checked={task.finished}
                 tabIndex={-1}
-                onClick={() => props.setChecked(task.id)}
+                onClick={() => props.setChecked(task.id, props.category)}
                 checkedIcon={<Check className={classes.checkedIcon} />}
                 icon={<Check className={classes.uncheckedIcon} />}
                 classes={{

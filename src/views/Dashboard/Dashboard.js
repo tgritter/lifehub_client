@@ -44,13 +44,14 @@ export default function Dashboard() {
   const [data, setData] = React.useState([]);
 
   useEffect(() => {
-    console.log('ENVTEST', process.env.REACT_APP_API_URL)
+    getTasks()
+  }, [])
+
+  const getTasks = () => {
     axios.get(process.env.REACT_APP_API_URL + '/api/v1/todos')
     .then(function (response) {
       // handle success
-      console.log(response.data)
       setData(response.data);
-
     })
     .catch(function (error) {
       // handle error
@@ -59,13 +60,13 @@ export default function Dashboard() {
     .then(function () {
       // always executed
     });
-  }, [])
+  }
 
-  const setChecked = (taskId) => {
+  const setChecked = (taskId, category) => {
     const index = data.findIndex(x => x.id === taskId);
     const newArray = [...data]
     newArray[index]['finished'] = !newArray[index]['finished'];
-    setData(newArray);
+    saveTask(taskId, category)
   };
   const handleTextChange = (e, taskId) => {
     const index = data.findIndex(x => x.id === taskId);
@@ -100,12 +101,14 @@ export default function Dashboard() {
       axios.put(process.env.REACT_APP_API_URL + '/api/v1/todos/' + task.id, task)
       .then(function (response) {
         console.log(response);
+        getTasks()
       })
     }else{
       delete task.id;
       axios.post(process.env.REACT_APP_API_URL + '/api/v1/todos', task)
       .then(function (response) {
         console.log(response);
+        getTasks()
       })
     }
   }
@@ -129,6 +132,45 @@ export default function Dashboard() {
       return data.filter((obj) => { return obj.category === filter && !obj.finished})
     }
   }
+
+  const tasksGraph = (data) => {
+    const labels = []; 
+    const series = [];
+    const period = 8;
+    const taskCount = Array(period).fill(0)
+
+    //Add Dates
+    for(var i = 0; i < period; i++){
+      var date = new Date();
+      date.setDate(date.getDate() - i);
+      labels.push(`${date.getMonth()}-${date.getDate()}`)
+    }
+    labels.reverse()
+
+    //Add Data
+    data.forEach((task) => {
+      if(task.finished){
+        const date = new Date(task.updated_at);
+        const index = labels.indexOf(`${date.getMonth()}-${date.getDate()}`)
+
+        if(index > -1){
+          taskCount[index] += task.weight;
+        }
+      }
+    })
+    series.push(taskCount)
+
+    return {labels,series}
+  }
+
+  const countIssues = data => {
+    let count = 0;
+    data.forEach((task) => {
+      count += task.finished ? 0 : task.weight;
+    })
+    return count;
+  }
+
   
   return (
     <div>
@@ -139,8 +181,8 @@ export default function Dashboard() {
               <CardIcon color="danger">
                 <Icon>info_outline</Icon>
               </CardIcon>
-              <p className={classes.cardCategory}>Fixed Issues</p>
-              <h3 className={classes.cardTitle}>75</h3>
+              <p className={classes.cardCategory}>Tasks</p>
+              <h3 className={classes.cardTitle}>{countIssues(data)}</h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
@@ -209,12 +251,13 @@ export default function Dashboard() {
         </GridItem>
       </GridContainer>
       <GridContainer>
+
       <GridItem xs={12} sm={12} md={4}>
           <Card chart>
             <CardHeader color="danger">
               <ChartistGraph
                 className="ct-chart"
-                data={completedTasksChart.data}
+                data={tasksGraph(data)}
                 type="Line"
                 options={completedTasksChart.options}
                 listener={completedTasksChart.animation}
@@ -231,6 +274,7 @@ export default function Dashboard() {
             </CardFooter>
           </Card>
         </GridItem>
+
         <GridItem xs={12} sm={12} md={4}>
           <Card chart>
             <CardHeader color="success">

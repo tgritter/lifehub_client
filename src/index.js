@@ -26,13 +26,13 @@ import Auth from "layouts/Auth.js";
 import RTL from "layouts/RTL.js";
 
 import "assets/css/material-dashboard-react.css?v=1.8.0";
+require('dotenv').config()
 
 const hist = createBrowserHistory();
-
 const token = window.localStorage.getItem('token')
 axios.defaults.headers.common = {'Authorization': `Bearer ${token}`}
-require('dotenv').config()
-console.log('ProcessTest',process.env)
+
+
 ReactDOM.render(
   <Router history={hist}>
     <Switch>
